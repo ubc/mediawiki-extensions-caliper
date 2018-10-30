@@ -1,0 +1,75 @@
+{
+	"name": "Caliper",
+	"version": "1.0.0",
+	"author": [
+		"Andrew Gardener"
+	],
+	"url": "https://github.com/ubc/mediawiki-extensions-caliper",
+	"description": "The Caliper extension emits caliper events to a LRS.",
+	"license-name": "GPL-3.0",
+    "type": "other",
+	"AutoloadClasses": {
+        "CaliperHooks": "caliper_hooks.php",
+        "CaliperMigrations": "caliper_migrations.php",
+        "CaliperEmitEventJob": "caliper_event_job.php",
+        "CaliperExtension\\caliper\\CaliperActor": "caliper/actor.php",
+        "CaliperExtension\\caliper\\CaliperEntity": "caliper/entity.php",
+        "CaliperExtension\\caliper\\CaliperEvent": "caliper/event.php",
+        "CaliperExtension\\caliper\\ResourceIRI": "caliper/resource_iri.php",
+        "CaliperExtension\\caliper\\CaliperSensor": "caliper/sensor.php"
+	},
+    "JobClasses": {
+        "caliperEmitEvent": "CaliperEmitEventJob"
+    },
+	"config": {
+		"CaliperHost": null,
+		"CaliperAPIKey": null,
+        "CaliperAppBaseUrl": null,
+        "CaliperUseJobQueue": true
+	},
+	"Hooks": {
+        "LoadExtensionSchemaUpdates": [
+            "CaliperMigrations::onLoadExtensionSchemaUpdates"
+        ],
+		"BeforePageDisplay": [
+			"CaliperHooks::onBeforePageDisplay"
+		],
+		"UserLoginComplete": [
+			"CaliperHooks::onUserLoginComplete"
+		],
+		"UserLogout": [
+			"CaliperHooks::onUserLogout"
+        ],
+        "PageContentSaveComplete": [
+			"CaliperHooks::onPageContentSaveComplete"
+        ],
+        "ArticleDelete": [
+			"CaliperHooks::onArticleDelete"
+        ],
+        "ArticleUndelete": [
+			"CaliperHooks::onArticleUndelete"
+        ],
+        "ArticleProtectComplete": [
+			"CaliperHooks::onArticleProtectComplete"
+        ],
+        "TitleMoveComplete": [
+			"CaliperHooks::onTitleMoveComplete"
+        ],
+        "ArticleMergeComplete": [
+			"CaliperHooks::onArticleMergeComplete"
+        ],
+        "ArticleRevisionVisibilitySet": [
+			"CaliperHooks::onArticleRevisionVisibilitySet"
+        ],
+        "WatchArticleComplete": [
+			"CaliperHooks::onWatchArticleComplete"
+        ],
+        "UnwatchArticleComplete": [
+			"CaliperHooks::onUnwatchArticleComplete"
+        ],
+        "MarkPatrolledComplete": [
+			"CaliperHooks::onMarkPatrolledComplete"
+        ]
+    },
+	"manifest_version": 1
+}
