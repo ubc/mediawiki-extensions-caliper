@@ -22,7 +22,6 @@ class CaliperSensor {
 		if ( self::$options == null ) {
             self::$options = (new Options())
                 ->setApiKey("Bearer $wgCaliperAPIKey")
-                ->setDebug(true)
                 ->setHost($wgCaliperHost);
         }
         return self::$options;
@@ -59,41 +58,57 @@ class CaliperSensor {
         }
         CaliperEvent::addDefaults($event);
 
+        $requestor = new HttpRequestor(self::getOptions());
+        $envelope = $requestor->createEnvelope(self::getSensor(), $event);
+        $eventJson = $requestor->serializeData($envelope);
+
         if ($wgCaliperUseJobQueue) {
             $title = \Title::newMainPage(); //dummy title
-            $params = array('event' => $event);
+            $params = array('eventJson' => $eventJson);
             $job = new \CaliperEmitEventJob($title, $params);
             \JobQueueGroup::singleton()->push($job);
         } else {
-            self::_sendEvent($event);
+            self::_sendEvent($eventJson, false);
         }
     }
 
-    public static function _sendEvent(Event &$event) {
+    public static function _sendEvent($eventJson, $throwErrors) {
+        if (!is_string($eventJson)) {
+            throw new \InvalidArgumentException(__METHOD__ . ': string expected');
+        }
         if (!self::caliperEnabled()) {
             return;
         }
 
-        $sensor = self::getSensor();
-        try {
-            $sensor->send($sensor, $event);
-        } catch (\RuntimeException $sendException) {
-            wfDebugLog("mediawiki-extension-caliper", 'Caliper Event Emit Error: '. $sendException->getMessage());
-            self::storeFailedEvent($event, $sendException->getMessage());
+        // Requires curl extension
+        // based off of https://github.com/IMSGlobal/caliper-php/blob/master/src/request/HttpRequestor.php#L75
+        $client = curl_init(self::getOptions()->getHost());
+        $headers = [
+            'Content-Type: application/json',
+            'Authorization: ' .self::getOptions()->getApiKey()
+        ];
+        curl_setopt_array($client, [
+            CURLOPT_POST => true,
+            CURLOPT_TIMEOUT_MS => self::getOptions()->getConnectionTimeout(),
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_USERAGENT => 'Caliper (PHP curl extension)',
+            CURLOPT_HEADER => true, // CURLOPT_HEADER required to return response text
+            CURLOPT_RETURNTRANSFER => true, // CURLOPT_RETURNTRANSFER required to return response text
+            CURLOPT_POSTFIELDS => $eventJson,
+        ]);
+
+        $responseText = curl_exec($client);
+        $responseInfo = curl_getinfo($client);
+        curl_close($client);
+
+        $responseCode = $responseText ? $responseInfo['http_code'] : null;
+        if ($responseCode != 200) {
+            wfDebugLog("mediawiki-extension-caliper", 'Caliper Event Emit Error: '. $responseCode);
+            if ($throwErrors) {
+                throw new \RuntimeException('Failure: HTTP error: ' . $responseCode);
+            } else {
+                wfDebugLog("mediawiki-extension-caliper", 'Caliper Event JSON: '. $eventJson);
+            }
         }
-    }
-
-    private static function storeFailedEvent(Event &$event, $errorString) {
-        global $wgDBprefix;
-
-        $requestor = new HttpRequestor(self::getOptions());
-        $envelope = $requestor->createEnvelope(self::getSensor(), $event);
-        $eventJson = @$requestor->serializeData($envelope);
-
-        $dbw = wfGetDB(DB_MASTER);
-        $res_ad = $dbw->insert($wgDBprefix."caliper_failed_events", array(
-            'event_json' => $eventJson,
-            'error' => $errorString
-        ));
     }
 }

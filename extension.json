@@ -10,7 +10,6 @@
     "type": "other",
 	"AutoloadClasses": {
         "CaliperHooks": "caliper_hooks.php",
-        "CaliperMigrations": "caliper_migrations.php",
         "CaliperEmitEventJob": "caliper_event_job.php",
         "CaliperExtension\\caliper\\CaliperActor": "caliper/actor.php",
         "CaliperExtension\\caliper\\CaliperEntity": "caliper/entity.php",

@@ -16,7 +16,7 @@ class ResourceIRI {
         return rtrim($baseUrl, '/');
     }
 
-    public static function media_wiki() {
+    public static function mediaWiki() {
         return self::getBaseUrl();
     }
 

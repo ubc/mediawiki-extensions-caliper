@@ -267,7 +267,7 @@ class CaliperHooks {
 
         $event = (new SessionEvent())
             ->setAction(new Action(Action::LOGGED_IN))
-            ->setObject(CaliperEntity::media_wiki());
+            ->setObject(CaliperEntity::mediaWiki());
 
         CaliperSensor::sendEvent($event);
     }
@@ -326,7 +326,7 @@ class CaliperHooks {
 
         $event = (new SessionEvent())
             ->setAction(new Action(Action::LOGGED_OUT))
-            ->setObject(CaliperEntity::media_wiki());
+            ->setObject(CaliperEntity::mediaWiki());
 
         CaliperSensor::sendEvent($event);
 

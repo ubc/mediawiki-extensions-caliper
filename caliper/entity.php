@@ -11,10 +11,10 @@ use IMSGlobal\Caliper\entities\reading\WebPage;
 use IMSGlobal\Caliper\entities\reading\Document;
 
 class CaliperEntity {
-    public static function media_wiki() {
+    public static function mediaWiki() {
         global $wgVersion;
 
-        $eduApp = (new SoftwareApplication( ResourceIRI::media_wiki() ))
+        $eduApp = (new SoftwareApplication( ResourceIRI::mediaWiki() ))
             ->setName("MediaWiki")
             ->setVersion($wgVersion);
 

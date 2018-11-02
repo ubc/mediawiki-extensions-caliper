@@ -15,7 +15,7 @@ class CaliperEvent {
 
         $event->setActor(CaliperActor::generateActor($wgUser));
         $event->setSession(CaliperEntity::session($wgUser));
-        $event->setEdApp(CaliperEntity::media_wiki());
+        $event->setEdApp(CaliperEntity::mediaWiki());
 
 
         if (!$event->getEventTime()) {
