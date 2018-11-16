@@ -28,7 +28,6 @@
 	},
 	"Hooks": {
         "LoadExtensionSchemaUpdates": [
-            "CaliperMigrations::onLoadExtensionSchemaUpdates"
         ],
 		"BeforePageDisplay": [
 			"CaliperHooks::onBeforePageDisplay"
