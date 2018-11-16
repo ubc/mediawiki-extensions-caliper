@@ -1,14 +1,14 @@
 {
-	"name": "Caliper",
-	"version": "1.0.0",
-	"author": [
-		"Andrew Gardener"
-	],
-	"url": "https://github.com/ubc/mediawiki-extensions-caliper",
-	"description": "The Caliper extension emits caliper events to a LRS.",
-	"license-name": "GPL-3.0",
+    "name": "Caliper",
+    "version": "1.0.0",
+    "author": [
+        "Andrew Gardener"
+    ],
+    "url": "https://github.com/ubc/mediawiki-extensions-caliper",
+    "description": "The Caliper extension emits caliper events to a LRS.",
+    "license-name": "GPL-3.0",
     "type": "other",
-	"AutoloadClasses": {
+    "AutoloadClasses": {
         "CaliperHooks": "caliper_hooks.php",
         "CaliperEmitEventJob": "caliper_event_job.php",
         "CaliperExtension\\caliper\\CaliperActor": "caliper/actor.php",
@@ -16,58 +16,58 @@
         "CaliperExtension\\caliper\\CaliperEvent": "caliper/event.php",
         "CaliperExtension\\caliper\\ResourceIRI": "caliper/resource_iri.php",
         "CaliperExtension\\caliper\\CaliperSensor": "caliper/sensor.php"
-	},
+    },
     "JobClasses": {
         "caliperEmitEvent": "CaliperEmitEventJob"
     },
-	"config": {
-		"CaliperHost": null,
-		"CaliperAPIKey": null,
+    "config": {
+        "CaliperHost": null,
+        "CaliperAPIKey": null,
         "CaliperAppBaseUrl": null,
         "CaliperUseJobQueue": true
-	},
-	"Hooks": {
+    },
+    "Hooks": {
         "LoadExtensionSchemaUpdates": [
         ],
-		"BeforePageDisplay": [
-			"CaliperHooks::onBeforePageDisplay"
-		],
-		"UserLoginComplete": [
-			"CaliperHooks::onUserLoginComplete"
-		],
-		"UserLogout": [
-			"CaliperHooks::onUserLogout"
+        "BeforePageDisplay": [
+            "CaliperHooks::onBeforePageDisplay"
+        ],
+        "UserLoginComplete": [
+            "CaliperHooks::onUserLoginComplete"
+        ],
+        "UserLogout": [
+            "CaliperHooks::onUserLogout"
         ],
         "PageContentSaveComplete": [
-			"CaliperHooks::onPageContentSaveComplete"
+            "CaliperHooks::onPageContentSaveComplete"
         ],
         "ArticleDelete": [
-			"CaliperHooks::onArticleDelete"
+            "CaliperHooks::onArticleDelete"
         ],
         "ArticleUndelete": [
-			"CaliperHooks::onArticleUndelete"
+            "CaliperHooks::onArticleUndelete"
         ],
         "ArticleProtectComplete": [
-			"CaliperHooks::onArticleProtectComplete"
+            "CaliperHooks::onArticleProtectComplete"
         ],
         "TitleMoveComplete": [
-			"CaliperHooks::onTitleMoveComplete"
+            "CaliperHooks::onTitleMoveComplete"
         ],
         "ArticleMergeComplete": [
-			"CaliperHooks::onArticleMergeComplete"
+            "CaliperHooks::onArticleMergeComplete"
         ],
         "ArticleRevisionVisibilitySet": [
-			"CaliperHooks::onArticleRevisionVisibilitySet"
+            "CaliperHooks::onArticleRevisionVisibilitySet"
         ],
         "WatchArticleComplete": [
-			"CaliperHooks::onWatchArticleComplete"
+            "CaliperHooks::onWatchArticleComplete"
         ],
         "UnwatchArticleComplete": [
-			"CaliperHooks::onUnwatchArticleComplete"
+            "CaliperHooks::onUnwatchArticleComplete"
         ],
         "MarkPatrolledComplete": [
-			"CaliperHooks::onMarkPatrolledComplete"
+            "CaliperHooks::onMarkPatrolledComplete"
         ]
     },
-	"manifest_version": 1
+    "manifest_version": 1
 }

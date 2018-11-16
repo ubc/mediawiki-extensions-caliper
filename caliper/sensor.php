@@ -19,7 +19,7 @@ class CaliperSensor {
         global $wgCaliperHost;
         global $wgCaliperAPIKey;
 
-		if ( self::$options == null ) {
+        if ( self::$options == null ) {
             self::$options = (new Options())
                 ->setApiKey("Bearer $wgCaliperAPIKey")
                 ->setHost($wgCaliperHost);
@@ -28,7 +28,7 @@ class CaliperSensor {
     }
 
     private static function getSensor() {
-		if ( self::$sensor == null ) {
+        if ( self::$sensor == null ) {
             self::$sensor = new Sensor(ResourceIRI::getBaseUrl());
             self::$sensor->registerClient('default_client', new Client('remote_lrs', self::getOptions()));
         }

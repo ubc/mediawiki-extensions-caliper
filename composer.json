@@ -1,21 +1,21 @@
 {
-	"name": "ubc/mediawiki-extensions-caliper",
-	"type": "mediawiki-extension",
-	"description": "The Caliper extension emits caliper events to a LRS.",
-	"keywords": [
-		"Caliper",
-		"Wiki",
-		"MediaWiki"
-	],
+    "name": "ubc/mediawiki-extensions-caliper",
+    "type": "mediawiki-extension",
+    "description": "The Caliper extension emits caliper events to a LRS.",
+    "keywords": [
+        "Caliper",
+        "Wiki",
+        "MediaWiki"
+    ],
     "homepage": "https://github.com/ubc/mediawiki-extensions-caliper",
-	"license": "GPL-3.0",
-	"authors": [
-		{
-			"name": "Andrew Gardener",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"imsglobal/caliper": "1.1.0"
-	}
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Andrew Gardener",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "imsglobal/caliper": "1.1.0"
+    }
 }
