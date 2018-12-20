@@ -1,0 +1,63 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "Event",
+    "actor": {
+        "id": "http://media_wiki/MKO098PUID",
+        "type": "Person",
+        "name": "Teacher1",
+        "dateCreated": "2018-10-25T18:58:07.000Z"
+    },
+    "action": "Created",
+    "object": {
+        "id": "http://localhost:8888/index.php?curid=47",
+        "type": "Document",
+        "name": "New Zombie",
+        "extensions": {
+            "redirect": true,
+            "redirectTo": "http://localhost:8888/index.php?curid=46"
+        },
+        "dateCreated": "2018-11-02T21:43:58.000Z",
+        "dateModified": "2018-11-02T21:43:58.000Z",
+        "creators": [
+            {
+                "id": "http://media_wiki/MKO098PUID",
+                "type": "Person",
+                "name": "Teacher1",
+                "dateCreated": "2018-10-25T18:58:07.000Z"
+            }
+        ],
+        "isPartOf": {
+            "id": "http://localhost:8888/New_Zombie",
+            "type": "WebPage"
+        },
+        "datePublished": "2018-11-02T21:43:58.000Z",
+        "version": "http://localhost:8888/index.php?oldid=97"
+    },
+    "eventTime": "2018-11-02T21:43:59.000Z",
+    "edApp": {
+        "id": "http://localhost:8888",
+        "type": "SoftwareApplication",
+        "name": "MediaWiki",
+        "version": "1.30.0"
+    },
+    "session": {
+        "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c",
+        "type": "Session",
+        "user": {
+            "id": "http://media_wiki/MKO098PUID",
+            "type": "Person",
+            "name": "Teacher1",
+            "dateCreated": "2018-10-25T18:58:07.000Z"
+        }
+    },
+    "id": "urn:uuid:3f351452-2114-4425-be49-08bb27f9738b",
+    "extensions": {
+        "createdFromMove": true,
+        "reason": "Moving WikiPage",
+        "browser-info": {
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
+            "referer": "http://localhost:8080/Special:MovePage/New_Zombie",
+            "ipAddress": "192.168.80.1"
+        }
+    }
+}

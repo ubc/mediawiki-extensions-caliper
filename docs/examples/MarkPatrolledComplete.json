@@ -1,0 +1,82 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "Event",
+    "actor": {
+        "id": "http://media_wiki/MKO098PUID",
+        "type": "Person",
+        "name": "Teacher1",
+        "dateCreated": "2018-10-25T18:58:07.000Z"
+    },
+    "action": "Reviewed",
+    "object": {
+        "id": "http://localhost:8888/index.php?oldid=101",
+        "type": "Document",
+        "name": "New Zombie Merge History",
+        "extensions": {
+            "comment": ""
+        },
+        "dateCreated": "2018-11-02T21:54:32.000Z",
+        "dateModified": "2018-11-02T21:54:32.000Z",
+        "creators": [
+            {
+                "id": "http://media_wiki/ABC123PUID",
+                "type": "Person",
+                "name": "Lastname",
+                "dateCreated": "2018-10-25T19:47:46.000Z"
+            }
+        ],
+        "isPartOf": {
+            "id": "http://localhost:8888/index.php?curid=48",
+            "type": "Document",
+            "name": "New Zombie Merge History",
+            "dateCreated": "2018-11-02T21:14:01.000Z",
+            "dateModified": "2018-11-02T21:54:32.000Z",
+            "creators": [
+                {
+                    "id": "http://media_wiki/MKO098PUID",
+                    "type": "Person",
+                    "name": "Teacher1",
+                    "dateCreated": "2018-10-25T18:58:07.000Z"
+                },
+                {
+                    "id": "http://media_wiki/ABC123PUID",
+                    "type": "Person",
+                    "name": "Lastname",
+                    "dateCreated": "2018-10-25T19:47:46.000Z"
+                }
+            ],
+            "isPartOf": {
+                "id": "http://localhost:8888/New_Zombie_Merge_History",
+                "type": "WebPage"
+            },
+            "datePublished": "2018-11-02T21:14:01.000Z",
+            "version": "http://localhost:8888/index.php?oldid=101"
+        },
+        "datePublished": "2018-11-02T21:54:32.000Z"
+    },
+    "eventTime": "2018-11-02T21:55:01.000Z",
+    "edApp": {
+        "id": "http://localhost:8888",
+        "type": "SoftwareApplication",
+        "name": "MediaWiki",
+        "version": "1.30.0"
+    },
+    "session": {
+        "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c",
+        "type": "Session",
+        "user": {
+            "id": "http://media_wiki/MKO098PUID",
+            "type": "Person",
+            "name": "Teacher1",
+            "dateCreated": "2018-10-25T18:58:07.000Z"
+        }
+    },
+    "id": "urn:uuid:8b01fd84-cb5e-4438-adf4-1a6d945620d8",
+    "extensions": {
+        "browser-info": {
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
+            "referer": "http://localhost:8080/index.php?title=New_Zombie_Merge_History&diff=101&oldid=100",
+            "ipAddress": "192.168.80.1"
+        }
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "Event",
+    "actor": {
+        "id": "http://media_wiki/MKO098PUID",
+        "type": "Person",
+        "name": "Teacher1",
+        "dateCreated": "2018-10-25T18:58:07.000Z"
+    },
+    "action": "Modified",
+    "object": {
+        "id": "http://localhost:8888/index.php?curid=46",
+        "type": "Document",
+        "name": "New Zombie",
+        "dateCreated": "2018-11-02T21:14:01.000Z",
+        "dateModified": "2018-11-02T21:42:19.000Z",
+        "creators": [
+            {
+                "id": "http://media_wiki/MKO098PUID",
+                "type": "Person",
+                "name": "Teacher1",
+                "dateCreated": "2018-10-25T18:58:07.000Z"
+            }
+        ],
+        "isPartOf": {
+            "id": "http://localhost:8888/New_Zombie",
+            "type": "WebPage"
+        },
+        "datePublished": "2018-11-02T21:14:01.000Z",
+        "version": "http://localhost:8888/index.php?oldid=94"
+    },
+    "eventTime": "2018-11-02T21:42:19.000Z",
+    "edApp": {
+        "id": "http://localhost:8888",
+        "type": "SoftwareApplication",
+        "name": "MediaWiki",
+        "version": "1.30.0"
+    },
+    "session": {
+        "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c",
+        "type": "Session",
+        "user": {
+            "id": "http://media_wiki/MKO098PUID",
+            "type": "Person",
+            "name": "Teacher1",
+            "dateCreated": "2018-10-25T18:58:07.000Z"
+        }
+    },
+    "id": "urn:uuid:8358e2bc-0cb5-40c0-88d3-ecaf09c1fd3b",
+    "extensions": {
+        "protection": {
+            "edit": "autoconfirmed",
+            "move": "sysop"
+        },
+        "reason": "Changing proction levels",
+        "browser-info": {
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
+            "referer": "http://localhost:8080/index.php?title=New_Zombie&action=unprotect",
+            "ipAddress": "192.168.80.1"
+        }
+    }
+}

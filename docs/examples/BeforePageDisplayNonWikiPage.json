@@ -1,0 +1,47 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "NavigationEvent",
+    "actor": {
+        "id": "http://media_wiki/MKO098PUID",
+        "type": "Person",
+        "name": "Teacher1",
+        "dateCreated": "2018-10-25T18:58:07.000Z"
+    },
+    "action": "NavigatedTo",
+    "object": {
+        "id": "http://localhost:8888/New_Zombie",
+        "type": "WebPage",
+        "extensions": {
+            "wikiPageExists": false
+        }
+    },
+    "eventTime": "2018-11-02T21:11:15.000Z",
+    "edApp": {
+        "id": "http://localhost:8888",
+        "type": "SoftwareApplication",
+        "name": "MediaWiki",
+        "version": "1.30.0"
+    },
+    "session": {
+        "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c",
+        "type": "Session",
+        "user": {
+            "id": "http://media_wiki/MKO098PUID",
+            "type": "Person",
+            "name": "Teacher1",
+            "dateCreated": "2018-10-25T18:58:07.000Z"
+        }
+    },
+    "id": "urn:uuid:1cb41c73-806a-40a8-afbd-d8f5930da2ef",
+    "extensions": {
+        "isMediaWikiArticle": true,
+        "relativePath": "New_Zombie",
+        "queryString": "",
+        "absolutePath": "http://localhost:8080/New_Zombie",
+        "absoluteUrl": "http://localhost:8080/New_Zombie",
+        "browser-info": {
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
+            "ipAddress": "192.168.80.1"
+        }
+    }
+}

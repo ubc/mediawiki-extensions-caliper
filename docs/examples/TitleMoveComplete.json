@@ -1,0 +1,61 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "Event",
+    "actor": {
+        "id": "http://media_wiki/MKO098PUID",
+        "type": "Person",
+        "name": "Teacher1",
+        "dateCreated": "2018-10-25T18:58:07.000Z"
+    },
+    "action": "Modified",
+    "object": {
+        "id": "http://localhost:8888/index.php?curid=46",
+        "type": "Document",
+        "name": "New Zombie (Moved)",
+        "dateCreated": "2018-11-02T21:14:01.000Z",
+        "dateModified": "2018-11-02T21:43:58.000Z",
+        "creators": [
+            {
+                "id": "http://media_wiki/MKO098PUID",
+                "type": "Person",
+                "name": "Teacher1",
+                "dateCreated": "2018-10-25T18:58:07.000Z"
+            }
+        ],
+        "isPartOf": {
+            "id": "http://localhost:8888/New_Zombie_(Moved)",
+            "type": "WebPage"
+        },
+        "datePublished": "2018-11-02T21:14:01.000Z",
+        "version": "http://localhost:8888/index.php?oldid=96"
+    },
+    "eventTime": "2018-11-02T21:43:59.000Z",
+    "edApp": {
+        "id": "http://localhost:8888",
+        "type": "SoftwareApplication",
+        "name": "MediaWiki",
+        "version": "1.30.0"
+    },
+    "session": {
+        "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c",
+        "type": "Session",
+        "user": {
+            "id": "http://media_wiki/MKO098PUID",
+            "type": "Person",
+            "name": "Teacher1",
+            "dateCreated": "2018-10-25T18:58:07.000Z"
+        }
+    },
+    "id": "urn:uuid:6cc6a88b-b0fb-4429-889a-50ab2c5bc005",
+    "extensions": {
+        "moved": true,
+        "reason": "Moving WikiPage",
+        "createdRedirectPage": true,
+        "redirectFrom": "http://localhost:8888/index.php?curid=47",
+        "browser-info": {
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
+            "referer": "http://localhost:8080/Special:MovePage/New_Zombie",
+            "ipAddress": "192.168.80.1"
+        }
+    }
+}

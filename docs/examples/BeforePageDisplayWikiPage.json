@@ -1,0 +1,68 @@
+{
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "type": "NavigationEvent",
+    "actor": {
+        "id": "http://media_wiki/MKO098PUID",
+        "type": "Person",
+        "name": "Teacher1",
+        "dateCreated": "2018-10-25T18:58:07.000Z"
+    },
+    "action": "NavigatedTo",
+    "object": {
+        "id": "http://localhost:8888/index.php?curid=2",
+        "type": "Document",
+        "name": "Zombie",
+        "dateCreated": "2018-10-26T19:34:21.000Z",
+        "dateModified": "2018-11-02T20:59:53.000Z",
+        "creators": [
+            {
+                "id": "http://media_wiki/MKO098PUID",
+                "type": "Person",
+                "name": "Teacher1",
+                "dateCreated": "2018-10-25T18:58:07.000Z"
+            },
+            {
+                "id": "http://media_wiki/ABC123PUID",
+                "type": "Person",
+                "name": "Lastname",
+                "dateCreated": "2018-10-25T19:47:46.000Z"
+            }
+        ],
+        "isPartOf": {
+            "id": "http://localhost:8888/Zombie",
+            "type": "WebPage"
+        },
+        "datePublished": "2018-10-26T19:34:21.000Z",
+        "version": "http://localhost:8888/index.php?oldid=89"
+    },
+    "eventTime": "2018-11-02T21:05:16.000Z",
+    "edApp": {
+        "id": "http://localhost:8888",
+        "type": "SoftwareApplication",
+        "name": "MediaWiki",
+        "version": "1.30.0"
+    },
+    "session": {
+        "id": "http://localhost:8888/session/ci73c71at9nr564pll1domo9k4ncid0m",
+        "type": "Session",
+        "user": {
+            "id": "http://media_wiki/MKO098PUID",
+            "type": "Person",
+            "name": "Teacher1",
+            "dateCreated": "2018-10-25T18:58:07.000Z"
+        }
+    },
+    "id": "urn:uuid:0736f2e5-beb8-4424-928b-11fb609c346d",
+    "extensions": {
+        "isMediaWikiArticle": true,
+        "relativePath": "Zombie",
+        "queryString": "",
+        "absolutePath": "http://localhost:8080/Zombie",
+        "absoluteUrl": "http://localhost:8080/Zombie",
+        "browser-info": {
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
+            "referer": "http://localhost:8080/Zombie",
+            "ipAddress": "192.168.80.1"
+            }
+    }
+}
