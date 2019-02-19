@@ -1,6 +1,7 @@
 <?php
 
 use IMSGlobal\Caliper\events\Event;
+use IMSGlobal\Caliper\events\ResourceManagementEvent;
 use IMSGlobal\Caliper\events\NavigationEvent;
 use IMSGlobal\Caliper\events\SessionEvent;
 
@@ -30,8 +31,9 @@ class CaliperHooks {
         $request = $out->getRequest();
 
         $absoluteUrl = $request->getFullRequestURL();
+        $absolutePath = preg_replace('/\?.*|\#.*/', '',  $absoluteUrl);
         $relativeUrl = $request->getRequestURL();
-        $relativePath = $request->getPathInfo()['title'];
+        $relativePath = preg_replace('/^\/|\?.*|\#.*/', '', $relativeUrl);
         $faviconFileName = basename($wgFavicon);
 
         # do not track navigation events for the favicon
@@ -55,7 +57,7 @@ class CaliperHooks {
             'isMediaWikiArticle' => $out->isArticle(),
             'relativePath' => $relativePath,
             'queryString' => $queryString,
-            'absolutePath' => preg_replace('/\?.*|\#.*/', '',  $absoluteUrl),
+            'absolutePath' => $absolutePath,
             'absoluteUrl' => $absoluteUrl,
         ]);
 
@@ -120,7 +122,7 @@ class CaliperHooks {
             $extensions['undoRevisionId'] = ResourceIRI::wikiPageRevision($undidRevId);
         }
 
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
             ->setAction(new Action($action))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
@@ -141,8 +143,8 @@ class CaliperHooks {
         $extensions = [
             'reason' => $reason
         ];
-        $event = (new Event())
-            ->setAction(new Action(Action::DEACTIVATED))
+        $event = (new ResourceManagementEvent())
+            ->setAction(new Action(Action::ARCHIVED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
 
@@ -167,8 +169,8 @@ class CaliperHooks {
             'comment' => $comment,
             'restoredPages' => $restoredPageIRIs
         ];
-        $event = (new Event())
-            ->setAction(new Action(Action::ACTIVATED))
+        $event = (new ResourceManagementEvent())
+            ->setAction(new Action(Action::RESTORED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
 
@@ -189,7 +191,7 @@ class CaliperHooks {
             'moveonly' => $moveonly
         ];
 
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
@@ -217,7 +219,7 @@ class CaliperHooks {
         if ($newid !== 0) {
             $extensions['redirectFrom'] = ResourceIRI::wikiPage($newid);
         }
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
@@ -231,7 +233,7 @@ class CaliperHooks {
                 'reason' => $reason
             ];
 
-            $event = (new Event())
+            $event = (new ResourceManagementEvent())
                 ->setAction(new Action(Action::CREATED))
                 ->setObject(CaliperEntity::wikiPage($wikiPage))
                 ->setExtensions($extensions);
@@ -256,7 +258,7 @@ class CaliperHooks {
             'wasDestination' => true,
             'redirectFrom' => ResourceIRI::wikiPage($sourceWikiPage->getId())
         ];
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($destWikiPage))
             ->setExtensions($extensions);
@@ -268,7 +270,7 @@ class CaliperHooks {
             'wasSource' => true,
             'wasDestination' => false
         ];
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($sourceWikiPage))
             ->setExtensions($extensions);
@@ -294,7 +296,7 @@ class CaliperHooks {
             'revisions' => $revisions
         ];
 
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);

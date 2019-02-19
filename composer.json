@@ -15,7 +15,13 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/IMSGlobal/caliper-php"
+        }
+    ],
     "require": {
-        "imsglobal/caliper": "1.1.0"
+        "imsglobal/caliper": "dev-develop#05f5eab0fc7fd14af44a410f0b65aff1d0e02d0a as 1.1.0"
     }
 }

@@ -33,9 +33,9 @@ Next you need to load the extension by adding the following to `CustomExtensions
     wfLoadExtension('caliper');
 
 
-Finally you need to add the database table for failed jobs using
+Finally you can run the job queue with:
 
-    php maintenance/update.php
+    php maintenance/runJobs.php
 
 ### Settings
 

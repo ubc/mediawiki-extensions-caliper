@@ -1,25 +1,18 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "e0c43f3fd0108f3a687b3d2f98bd74f7",
-    "content-hash": "cde65aac95f30ee135ff44eafa9108c8",
+    "content-hash": "8a4037511357cac2220508993602b9d0",
     "packages": [
         {
             "name": "imsglobal/caliper",
-            "version": "1.1.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "https://github.com/IMSGlobal/caliper-php-public.git",
-                "reference": "6a25c9d180aa51871f9a8387331ede84d695466d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/IMSGlobal/caliper-php-public/zipball/6a25c9d180aa51871f9a8387331ede84d695466d",
-                "reference": "6a25c9d180aa51871f9a8387331ede84d695466d",
-                "shasum": ""
+                "url": "https://github.com/IMSGlobal/caliper-php",
+                "reference": "b665dfda6f8bb3af2e461a16266b0bc649c9438a"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -36,7 +29,6 @@
                     "/tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-3.0"
             ],
@@ -51,13 +43,22 @@
             "keywords": [
                 "caliper"
             ],
-            "time": "2018-01-16 15:32:04"
+            "time": "2018-11-21T18:07:17+00:00"
         }
     ],
     "packages-dev": [],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "1.1.0",
+            "alias_normalized": "1.1.0.0",
+            "version": "dev-develop",
+            "package": "imsglobal/caliper"
+        }
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "imsglobal/caliper": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

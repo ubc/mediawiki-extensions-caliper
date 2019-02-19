@@ -1,13 +1,13 @@
 {
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
-    "type": "Event",
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1/ResourceManagementProfile-extension",
+    "type": "ResourceManagementEvent",
     "actor": {
         "id": "http://media_wiki/MKO098PUID",
         "type": "Person",
         "name": "Teacher1",
         "dateCreated": "2018-10-25T18:58:07.000Z"
     },
-    "action": "Activated",
+    "action": "Restored",
     "object": {
         "id": "http://localhost:8888/index.php?curid=46",
         "type": "Document",
