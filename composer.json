@@ -22,6 +22,6 @@
         }
     ],
     "require": {
-        "imsglobal/caliper": "dev-develop#05f5eab0fc7fd14af44a410f0b65aff1d0e02d0a as 1.1.0"
+        "imsglobal/caliper": "dev-develop#c7e34e230abc7bbb647f8f94245cb649f6191bcd as 1.2.0"
     }
 }

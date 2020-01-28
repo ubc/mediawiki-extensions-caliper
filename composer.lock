@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a4037511357cac2220508993602b9d0",
+    "content-hash": "4bb333f27664705b676aaa6ea06e0795",
     "packages": [
         {
             "name": "imsglobal/caliper",
@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/IMSGlobal/caliper-php",
-                "reference": "b665dfda6f8bb3af2e461a16266b0bc649c9438a"
+                "reference": "c7e34e230abc7bbb647f8f94245cb649f6191bcd"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -43,14 +43,14 @@
             "keywords": [
                 "caliper"
             ],
-            "time": "2018-11-21T18:07:17+00:00"
+            "time": "2020-01-22T19:01:21+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [
         {
-            "alias": "1.1.0",
-            "alias_normalized": "1.1.0.0",
+            "alias": "1.2.0",
+            "alias_normalized": "1.2.0.0",
             "version": "dev-develop",
             "package": "imsglobal/caliper"
         }
