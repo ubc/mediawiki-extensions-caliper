@@ -3,9 +3,7 @@ namespace CaliperExtension\caliper;
 
 use CaliperExtension\caliper\ResourceIRI;
 use CaliperExtension\caliper\CaliperSensor;
-use IMSGlobal\Caliper\entities\agent\Person;
 use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
-use IMSGlobal\Caliper\entities\EntityType;
 use IMSGlobal\Caliper\entities\session\Session;
 use IMSGlobal\Caliper\entities\reading\WebPage;
 use IMSGlobal\Caliper\entities\reading\Document;
@@ -23,12 +21,43 @@ class CaliperEntity {
 
     public static function session(\User &$user) {
         global $wgRequest;
+        $headers = $wgRequest->getAllHeaders();
+        $session_id = $wgRequest->getSessionId()->getId();
 
-        $session = (new Session( ResourceIRI::user_session($wgRequest->getSessionId()->getId()) ))
-            ->setUser(CaliperActor::generateActor($user));
+        $session = (new Session( ResourceIRI::user_session($session_id) ))
+            ->setUser( CaliperActor::generateActor($user) )
+            ->setClient( CaliperEntity::client($session_id) );
+
+		$extensions = [];
+        if (array_key_exists('REFERER', $headers)) {
+            $extensions['referer'] = $headers['REFERER'];
+        }
+		if ( [] !== $extensions ) {
+			$session->setExtensions( $extensions );
+		}
 
         return $session;
     }
+
+	public static function client( $session_id ) {
+        global $wgRequest;
+        $headers = $wgRequest->getAllHeaders();
+
+        $user_client = ( new SoftwareApplication( ResourceIRI::user_client( $session_id ) ) );
+
+        if (array_key_exists('HOST', $headers)) {
+            $user_client->setHost( $headers['HOST'] );
+        }
+        if (array_key_exists('USER-AGENT', $headers)) {
+            $user_client->setUserAgent( $headers['USER-AGENT'] );
+        }
+
+        if ($wgRequest->getIP()) {
+			$user_client->setIpAddress( $wgRequest->getIP() );
+        }
+
+		return $user_client;
+	}
 
 
     public static function wikiPage(\WikiPage &$wikiPage) {

@@ -1,5 +1,5 @@
 {
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p2",
     "type": "Event",
     "actor": {
         "id": "http://media_wiki/MKO098PUID",
@@ -7,6 +7,7 @@
         "name": "Teacher1",
         "dateCreated": "2018-10-25T18:58:07.000Z"
     },
+    "profile": "GeneralProfile",
     "action": "Subscribed",
     "object": {
         "id": "http://localhost:8888/index.php?curid=46",
@@ -39,6 +40,16 @@
     "session": {
         "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c",
         "type": "Session",
+        "extensions": {
+            "referer": "http://localhost:8080/index.php?title=New_Zombie&action=edit"
+        },
+        "client": {
+            "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c#client",
+            "type": "SoftwareApplication",
+            "host": "localhost:8080",
+            "ipAddress": "192.168.80.1",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:72.0) Gecko/20100101 Firefox/72.0"
+        },
         "user": {
             "id": "http://media_wiki/MKO098PUID",
             "type": "Person",
@@ -46,12 +57,5 @@
             "dateCreated": "2018-10-25T18:58:07.000Z"
         }
     },
-    "id": "urn:uuid:90d4279e-6248-4006-91cf-0d89a411c86c",
-    "extensions": {
-        "browser-info": {
-            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
-            "referer": "http://localhost:8080/index.php?title=New_Zombie&action=edit",
-            "ipAddress": "192.168.80.1"
-        }
-    }
+    "id": "urn:uuid:90d4279e-6248-4006-91cf-0d89a411c86c"
 }

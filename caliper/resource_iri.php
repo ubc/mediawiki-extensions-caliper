@@ -34,6 +34,10 @@ class ResourceIRI {
         return self::getBaseUrl() . '/session/' . $session_id;
     }
 
+    public static function user_client($session_id) {
+		return self::user_session( $session_id ) . '#client';
+    }
+
     public static function wikiPage($wikiPageId) {
         if (!is_integer($wikiPageId)) {
             throw new \InvalidArgumentException(__METHOD__ . ': integer expected');
