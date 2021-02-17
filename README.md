@@ -55,4 +55,4 @@ Use the `SetCaliperActorObject` hook in order to create customized actor objects
 
 ### Event emission failure
 
-If `CaliperUseJobQueue` is enabled, then the MediaWiki job queue will handle retries. If `wgCaliperUseJobQueue` is disabled, failed events are logged (full JSON) and no errors are thrown.
+If `CaliperUseJobQueue` is enabled, then the MediaWiki job queue will handle retries. If `CaliperUseJobQueue` is disabled, failed events are logged (full JSON) and no errors are thrown.
