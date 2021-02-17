@@ -1,5 +1,5 @@
 {
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p1",
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1p2",
     "type": "NavigationEvent",
     "actor": {
         "id": "http://media_wiki/MKO098PUID",
@@ -7,6 +7,7 @@
         "name": "Teacher1",
         "dateCreated": "2018-10-25T18:58:07.000Z"
     },
+    "profile": "ReadingProfile",
     "action": "NavigatedTo",
     "object": {
         "id": "http://localhost:8888/New_Zombie",
@@ -25,6 +26,13 @@
     "session": {
         "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c",
         "type": "Session",
+        "client": {
+            "id": "http://localhost:8888/session/rsr5fd5imrkbovn88fofct9dt4fp6g1c#client",
+            "type": "SoftwareApplication",
+            "host": "localhost:8080",
+            "ipAddress": "192.168.80.1",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:72.0) Gecko/20100101 Firefox/72.0"
+        },
         "user": {
             "id": "http://media_wiki/MKO098PUID",
             "type": "Person",
@@ -38,10 +46,6 @@
         "relativePath": "New_Zombie",
         "queryString": "",
         "absolutePath": "http://localhost:8080/New_Zombie",
-        "absoluteUrl": "http://localhost:8080/New_Zombie",
-        "browser-info": {
-            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:63.0) Gecko/20100101 Firefox/63.0",
-            "ipAddress": "192.168.80.1"
-        }
+        "absoluteUrl": "http://localhost:8080/New_Zombie"
     }
 }

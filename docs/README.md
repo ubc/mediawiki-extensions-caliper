@@ -38,7 +38,11 @@ Hooks: `PageContentSaveComplete`
 
 Create WikiPage Example: [PageContentSaveCompleteCreate.json](examples/PageContentSaveCompleteCreate.json)
 
+Create WikiPage Tool Use: [PageContentSaveCompleteCreateToolUse.json](examples/PageContentSaveCompleteCreateToolUse.json)
+
 Edit WikiPage Example: [PageContentSaveCompleteEdit.json](examples/PageContentSaveCompleteEdit.json)
+
+Edit WikiPage Tool Use: [PageContentSaveCompleteEditToolUse.json](examples/PageContentSaveCompleteEditToolUse.json)
 
 Captures WikiPage create and edit events.
 
@@ -49,6 +53,8 @@ Hooks: `ArticleDelete`
 
 Example: [ArticleDelete.json](examples/ArticleDelete.json)
 
+Tool Use: [ArticleDeleteToolUse.json](examples/ArticleDeleteToolUse.json)
+
 Captures WikiPage delete event.
 
 
@@ -57,6 +63,8 @@ Captures WikiPage delete event.
 Hooks: `ArticleUndelete`
 
 Example: [ArticleUndelete.json](examples/ArticleUndelete.json)
+
+Tool Use: [ArticleUndeleteToolUse.json](examples/ArticleUndeleteToolUse.json)
 
 Captures WikiPage undelete event.
 

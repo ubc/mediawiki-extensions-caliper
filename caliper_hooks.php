@@ -1,18 +1,13 @@
 <?php
 
 use IMSGlobal\Caliper\events\Event;
+use IMSGlobal\Caliper\events\ToolUseEvent;
+use IMSGlobal\Caliper\events\ResourceManagementEvent;
 use IMSGlobal\Caliper\events\NavigationEvent;
 use IMSGlobal\Caliper\events\SessionEvent;
 
+use IMSGlobal\Caliper\profiles\Profile;
 use IMSGlobal\Caliper\actions\Action;
-
-use IMSGlobal\Caliper\entities\agent\Organization;
-use IMSGlobal\Caliper\entities\agent\Person;
-use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
-use IMSGlobal\Caliper\entities\DigitalResource;
-use IMSGlobal\Caliper\entities\lis\Membership;
-use IMSGlobal\Caliper\entities\session\Session;
-
 use CaliperExtension\caliper\ResourceIRI;
 use CaliperExtension\caliper\CaliperEntity;
 use CaliperExtension\caliper\CaliperSensor;
@@ -30,8 +25,9 @@ class CaliperHooks {
         $request = $out->getRequest();
 
         $absoluteUrl = $request->getFullRequestURL();
+        $absolutePath = preg_replace('/\?.*|\#.*/', '',  $absoluteUrl);
         $relativeUrl = $request->getRequestURL();
-        $relativePath = $request->getPathInfo()['title'];
+        $relativePath = preg_replace('/^\/|\?.*|\#.*/', '', $relativeUrl);
         $faviconFileName = basename($wgFavicon);
 
         # do not track navigation events for the favicon
@@ -40,6 +36,7 @@ class CaliperHooks {
         }
 
         $event = (new NavigationEvent())
+            ->setProfile(new Profile(Profile::READING))
             ->setAction(new Action(Action::NAVIGATED_TO));
 
         if ($out->isArticle()) {
@@ -55,7 +52,7 @@ class CaliperHooks {
             'isMediaWikiArticle' => $out->isArticle(),
             'relativePath' => $relativePath,
             'queryString' => $queryString,
-            'absolutePath' => preg_replace('/\?.*|\#.*/', '',  $absoluteUrl),
+            'absolutePath' => $absolutePath,
             'absoluteUrl' => $absoluteUrl,
         ]);
 
@@ -70,6 +67,7 @@ class CaliperHooks {
         }
 
         $event = (new SessionEvent())
+            ->setProfile(new Profile(Profile::SESSION))
             ->setAction(new Action(Action::LOGGED_IN))
             ->setObject(CaliperEntity::mediaWiki());
 
@@ -84,6 +82,7 @@ class CaliperHooks {
         }
 
         $event = (new SessionEvent())
+            ->setProfile(new Profile(Profile::SESSION))
             ->setAction(new Action(Action::LOGGED_OUT))
             ->setObject(CaliperEntity::mediaWiki());
 
@@ -120,11 +119,17 @@ class CaliperHooks {
             $extensions['undoRevisionId'] = ResourceIRI::wikiPageRevision($undidRevId);
         }
 
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
             ->setAction(new Action($action))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
+        CaliperSensor::sendEvent($event);
 
+        $event = (new ToolUseEvent())
+            ->setProfile(new Profile(Profile::TOOL_USE))
+            ->setAction(new Action(Action::USED))
+            ->setObject(CaliperEntity::mediaWiki());
         CaliperSensor::sendEvent($event);
 
         return true;
@@ -141,11 +146,17 @@ class CaliperHooks {
         $extensions = [
             'reason' => $reason
         ];
-        $event = (new Event())
-            ->setAction(new Action(Action::DEACTIVATED))
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
+            ->setAction(new Action(Action::ARCHIVED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
+        CaliperSensor::sendEvent($event);
 
+        $event = (new ToolUseEvent())
+            ->setProfile(new Profile(Profile::TOOL_USE))
+            ->setAction(new Action(Action::USED))
+            ->setObject(CaliperEntity::mediaWiki());
         CaliperSensor::sendEvent($event);
     }
 
@@ -167,11 +178,17 @@ class CaliperHooks {
             'comment' => $comment,
             'restoredPages' => $restoredPageIRIs
         ];
-        $event = (new Event())
-            ->setAction(new Action(Action::ACTIVATED))
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
+            ->setAction(new Action(Action::RESTORED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
+        CaliperSensor::sendEvent($event);
 
+        $event = (new ToolUseEvent())
+            ->setProfile(new Profile(Profile::TOOL_USE))
+            ->setAction(new Action(Action::USED))
+            ->setObject(CaliperEntity::mediaWiki());
         CaliperSensor::sendEvent($event);
     }
 
@@ -189,7 +206,8 @@ class CaliperHooks {
             'moveonly' => $moveonly
         ];
 
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
@@ -217,7 +235,8 @@ class CaliperHooks {
         if ($newid !== 0) {
             $extensions['redirectFrom'] = ResourceIRI::wikiPage($newid);
         }
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
@@ -231,7 +250,8 @@ class CaliperHooks {
                 'reason' => $reason
             ];
 
-            $event = (new Event())
+            $event = (new ResourceManagementEvent())
+                ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
                 ->setAction(new Action(Action::CREATED))
                 ->setObject(CaliperEntity::wikiPage($wikiPage))
                 ->setExtensions($extensions);
@@ -256,7 +276,8 @@ class CaliperHooks {
             'wasDestination' => true,
             'redirectFrom' => ResourceIRI::wikiPage($sourceWikiPage->getId())
         ];
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($destWikiPage))
             ->setExtensions($extensions);
@@ -268,7 +289,8 @@ class CaliperHooks {
             'wasSource' => true,
             'wasDestination' => false
         ];
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($sourceWikiPage))
             ->setExtensions($extensions);
@@ -294,7 +316,8 @@ class CaliperHooks {
             'revisions' => $revisions
         ];
 
-        $event = (new Event())
+        $event = (new ResourceManagementEvent())
+            ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
             ->setAction(new Action(Action::MODIFIED))
             ->setObject(CaliperEntity::wikiPage($wikiPage))
             ->setExtensions($extensions);
@@ -310,6 +333,7 @@ class CaliperHooks {
         }
 
         $event = (new Event())
+            ->setProfile(new Profile(Profile::GENERAL))
             ->setAction(new Action(Action::SUBSCRIBED))
             ->setObject(CaliperEntity::wikiPage($wikiPage));
 
@@ -324,6 +348,7 @@ class CaliperHooks {
         }
 
         $event = (new Event())
+            ->setProfile(new Profile(Profile::GENERAL))
             ->setAction(new Action(Action::UNSUBSCRIBED))
             ->setObject(CaliperEntity::wikiPage($wikiPage));
 
@@ -341,6 +366,7 @@ class CaliperHooks {
         $revision = \Revision::newFromId( $recentChange->getAttribute('rc_this_oldid') );
 
         $event = (new Event())
+            ->setProfile(new Profile(Profile::GENERAL))
             ->setAction(new Action(Action::REVIEWED))
             ->setObject(CaliperEntity::wikiPageRevision($revision));
 
