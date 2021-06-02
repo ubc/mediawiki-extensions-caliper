@@ -22,7 +22,8 @@ class CaliperEntity {
     public static function session(\User &$user) {
         global $wgRequest;
         $headers = $wgRequest->getAllHeaders();
-        $session_id = $wgRequest->getSessionId()->getId();
+        $session_id_object = $wgRequest->getSessionId();
+        $session_id = $session_id_object ? $session_id_object->getId() : 'null';
 
         $session = (new Session( ResourceIRI::user_session($session_id) ))
             ->setUser( CaliperActor::generateActor($user) )
