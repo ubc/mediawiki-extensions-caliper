@@ -29,9 +29,14 @@ class CaliperHooks {
         $relativeUrl = $request->getRequestURL();
         $relativePath = preg_replace('/^\/|\?.*|\#.*/', '', $relativeUrl);
         $faviconFileName = basename($wgFavicon);
+        $headers = $request->getAllHeaders();
 
-        # do not track navigation events for the favicon
+        // do not track navigation events for the favicon
         if (strcasecmp($relativePath, $faviconFileName) == 0) {
+            return;
+        }
+        // do not track Kubernetes probes (TODO: make this configurable for other probes)
+        if (array_key_exists('USER-AGENT', $headers) && strpos(strtolower($headers['USER-AGENT']), 'kube-probe') !== false) {
             return;
         }
 
