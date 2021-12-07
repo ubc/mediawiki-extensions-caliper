@@ -199,7 +199,7 @@ class CaliperHooks {
 
     // Modified WikiPage Event (protect)
     public static function onArticleProtectComplete(\WikiPage &$wikiPage, \User &$user,
-        $protect, $reason, $moveonly)
+        $protect, $reason)
     {
         if (!CaliperSensor::caliperEnabled()) {
             return;
@@ -208,7 +208,6 @@ class CaliperHooks {
         $extensions = [
             'protection' => $protect,
             'reason' => $reason,
-            'moveonly' => $moveonly
         ];
 
         $event = (new ResourceManagementEvent())
