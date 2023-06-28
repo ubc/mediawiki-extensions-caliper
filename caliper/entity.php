@@ -63,9 +63,10 @@ class CaliperEntity {
 
     public static function wikiPage(\WikiPage &$wikiPage) {
         if ($wikiPage->exists()) {
-            $currentRevision = $wikiPage->getRevision();
+            $currentRevision = $wikiPage->getRevisionRecord();
             $currentRevisionUser = \User::newFromId( $wikiPage->getUser() );
-            $firstRevision = $wikiPage->getOldestRevision();
+            # getOldestRevision is deprecated
+            #$firstRevision = $wikiPage->getOldestRevision();
 
             $creators = array();
             foreach ($wikiPage->getContributors() as $creator) {
@@ -82,9 +83,9 @@ class CaliperEntity {
                 ->setIsPartOf( CaliperEntity::webpage($wikiPage->getTitle()->getPrefixedURL()) )
                 ->setVersion( ResourceIRI::wikiPageRevision($currentRevision->getId()) )
                 ->setCreators($creators)
-                ->setDateModified(CaliperSensor::mediawikiTimestampToDateTime($wikiPage->getTimestamp()))
-                ->setDateCreated(CaliperSensor::mediawikiTimestampToDateTime($firstRevision->getTimestamp()))
-                ->setDatePublished(CaliperSensor::mediawikiTimestampToDateTime($firstRevision->getTimestamp()));
+                ->setDateModified(CaliperSensor::mediawikiTimestampToDateTime($wikiPage->getTimestamp()));
+                #->setDateCreated(CaliperSensor::mediawikiTimestampToDateTime($firstRevision->getTimestamp()))
+                #->setDatePublished(CaliperSensor::mediawikiTimestampToDateTime($firstRevision->getTimestamp()));
 
             $extensions = array();
             $redirect = $wikiPage->followRedirect();
