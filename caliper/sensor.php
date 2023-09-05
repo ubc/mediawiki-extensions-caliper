@@ -1,6 +1,8 @@
 <?php
 namespace CaliperExtension\caliper;
 
+use MediaWiki\MediaWikiServices;
+
 use IMSGlobal\Caliper\Options;
 use IMSGlobal\Caliper\Sensor;
 use CaliperExtension\caliper\ResourceIRI;
@@ -38,8 +40,24 @@ class CaliperSensor {
     public static function caliperEnabled() {
         global $wgCaliperHost;
         global $wgCaliperAPIKey;
+        global $wgCaliperUseJobQueue;
 
-        return (is_string($wgCaliperHost) && is_string($wgCaliperAPIKey));
+        $caliperEnabled = (is_string($wgCaliperHost) &&
+                           is_string($wgCaliperAPIKey));
+
+        // mediawiki queue is not writeable in read only mode. If caliper is
+        // configured to use the queue and wiki is read only, it'll throw an
+        // error, so we disable caliper in such cases
+        $isReadOnly = MediaWikiServices::getInstance()
+                                       ->getConfiguredReadOnlyMode()
+                                       ->isReadOnly();
+        if ($caliperEnabled && $isReadOnly && $wgCaliperUseJobQueue) {
+            wfDebugLog('mediawiki-extension-caliper',
+                       'Caliper disabled since wiki is in read only mode.');
+            return false;
+        }
+
+        return $caliperEnabled;
     }
 
     public static function mediawikiTimestampToDateTime($timestamp) {
