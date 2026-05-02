@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12474f656c0f46873a95ff0645d1e4b7",
+    "content-hash": "50c95075b037650ec5e392bcd26e4b68",
     "packages": [
         {
             "name": "imsglobal/caliper",
@@ -29,5 +29,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }

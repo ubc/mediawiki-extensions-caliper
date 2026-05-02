@@ -32,7 +32,7 @@
               },
               "_comment": {
                 "source": {
-                  "url": "https://github.com/IMSGlobal/caliper-php",
+                  "url": "https://github.com/1EdTech/caliper-php",
                   "type": "git",
                   "reference": "dev-develop#c7e34e230abc7bbb647f8f94245cb649f6191bcd"
                 }
