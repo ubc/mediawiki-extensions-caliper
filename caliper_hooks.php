@@ -12,12 +12,14 @@ use CaliperExtension\caliper\ResourceIRI;
 use CaliperExtension\caliper\CaliperEntity;
 use CaliperExtension\caliper\CaliperSensor;
 
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Storage\EditResult;
+
 class CaliperHooks {
     // Page Navigation To Event
     public static function onBeforePageDisplay(\OutputPage &$out, \Skin &$skin)
     {
         global $wgFavicon;
-        global $wgUser;
 
         if (!CaliperSensor::caliperEnabled()) {
             return;
@@ -96,31 +98,40 @@ class CaliperHooks {
         return true;
     }
 
-    // Create/Edit WikiPage Event
-    public static function onPageContentSaveComplete(\WikiPage &$wikiPage, \User &$user,
-        $content, $summary, $isMinor, $isWatch, $section, &$flags,
-        \Revision $revision, &$status, $baseRevId, $undidRevId )
-    {
+    // Create/Edit WikiPage Event (replaces PageContentSaveComplete; available since MW 1.35)
+    public static function onPageSaveComplete(
+        $wikiPage,
+        $user,
+        $summary,
+        $flags,
+        $revisionRecord,
+        $editResult
+    ) {
         if (!CaliperSensor::caliperEnabled()) {
             return true;
         }
 
-        $currentRevision = $wikiPage->getRevision();
-        $statusValue = $status->getValue();
-        $action = array_key_exists('new', $statusValue) && $statusValue['new'] == true ?
-            Action::CREATED : Action::MODIFIED;
+        $isNew = ($flags & EDIT_NEW) !== 0;
+        $isMinor = ($flags & EDIT_MINOR) !== 0;
+        $action = $isNew ? Action::CREATED : Action::MODIFIED;
+
+        $baseRevId = $revisionRecord->getParentId() ?: 0;
+
+        $isUndo = $editResult->isRevert()
+            && $editResult->getRevertMethod() === EditResult::REVERT_UNDO;
+        $undidRevId = $isUndo ? ($editResult->getNewestRevertedRevisionId() ?? 0) : 0;
 
         $extensions = [
             'summary' => $summary,
-            'isUndo' => $undidRevId !== 0,
-            'isBasedOffRevision' => $baseRevId !== false,
-            'isMinor' => $isMinor == true,
-            'currentRevision' => ResourceIRI::wikiPageRevision($currentRevision->getId())
+            'isUndo' => $isUndo,
+            'isBasedOffRevision' => $baseRevId !== 0,
+            'isMinor' => $isMinor,
+            'currentRevision' => ResourceIRI::wikiPageRevision($revisionRecord->getId())
         ];
         if ($baseRevId) {
             $extensions['baseRevisionId'] = ResourceIRI::wikiPageRevision($baseRevId);
         }
-        if ($undidRevId !== 0) {
+        if ($undidRevId) {
             $extensions['undoRevisionId'] = ResourceIRI::wikiPageRevision($undidRevId);
         }
 
@@ -173,7 +184,9 @@ class CaliperHooks {
             return;
         }
 
-        $wikiPage = \WikiPage::newFromId( $oldPageId );
+        $wikiPage = MediaWikiServices::getInstance()
+            ->getWikiPageFactory()
+            ->newFromID( $oldPageId );
         $restoredPageIRIs = [];
         foreach (array_keys($restoredPages) as $wikiPageId) {
             $restoredPageIRIs[] = ResourceIRI::wikiPage($wikiPageId);
@@ -219,25 +232,31 @@ class CaliperHooks {
         CaliperSensor::sendEvent($event);
     }
 
-
-
-    // Modified WikiPage Event (change title)
+    // Modified WikiPage Event (move) (replaces TitleMoveComplete; available since MW 1.35)
     // Also Create new WikiPage Event (if creating a redirect)
-    public static function onTitleMoveComplete(\Title &$title, \Title &$newTitle,
-        \User $user, $oldid, $newid, $reason, \Revision $revision)
-    {
+    public static function onPageMoveComplete(
+        $old,
+        $new,
+        $userIdentity,
+        $pageid,
+        $redirid,
+        $reason,
+        $revisionRecord
+    ) {
         if (!CaliperSensor::caliperEnabled()) {
             return;
         }
 
-        $wikiPage = \WikiPage::newFromId( $oldid );
+        $wikiPageFactory = MediaWikiServices::getInstance()->getWikiPageFactory();
+
+        $wikiPage = $wikiPageFactory->newFromID( $pageid );
         $extensions = [
             'moved' => true,
             'reason' => $reason,
-            'createdRedirectPage' => $newid !== 0
+            'createdRedirectPage' => $redirid !== 0
         ];
-        if ($newid !== 0) {
-            $extensions['redirectFrom'] = ResourceIRI::wikiPage($newid);
+        if ($redirid !== 0) {
+            $extensions['redirectFrom'] = ResourceIRI::wikiPage($redirid);
         }
         $event = (new ResourceManagementEvent())
             ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
@@ -247,8 +266,8 @@ class CaliperHooks {
 
         CaliperSensor::sendEvent($event);
 
-        if ($newid !== 0) {
-            $wikiPage = \WikiPage::newFromId( $newid );
+        if ($redirid !== 0) {
+            $redirectWikiPage = $wikiPageFactory->newFromID( $redirid );
             $extensions = [
                 'createdFromMove' => true,
                 'reason' => $reason
@@ -257,7 +276,7 @@ class CaliperHooks {
             $event = (new ResourceManagementEvent())
                 ->setProfile(new Profile(Profile::RESOURCE_MANAGEMENT))
                 ->setAction(new Action(Action::CREATED))
-                ->setObject(CaliperEntity::wikiPage($wikiPage))
+                ->setObject(CaliperEntity::wikiPage($redirectWikiPage))
                 ->setExtensions($extensions);
 
             CaliperSensor::sendEvent($event);
@@ -271,8 +290,9 @@ class CaliperHooks {
             return;
         }
 
-        $sourceWikiPage = \WikiPage::newFromId( $sourceTitle->getArticleID() );
-        $destWikiPage = \WikiPage::newFromId( $destTitle->getArticleID() );
+        $wikiPageFactory = MediaWikiServices::getInstance()->getWikiPageFactory();
+        $sourceWikiPage = $wikiPageFactory->newFromID( $sourceTitle->getArticleID() );
+        $destWikiPage = $wikiPageFactory->newFromID( $destTitle->getArticleID() );
 
         $extensions = [
             'mergedHistory' => true,
@@ -309,7 +329,9 @@ class CaliperHooks {
             return;
         }
 
-        $wikiPage = \WikiPage::newFromId( $title->getArticleID() );
+        $wikiPage = MediaWikiServices::getInstance()
+            ->getWikiPageFactory()
+            ->newFromID( $title->getArticleID() );
         $revisions = [];
         foreach ($visibilityChangeMap as $revisionId => $changes) {
             $revisions[ResourceIRI::wikiPageRevision($revisionId)] = $changes;
@@ -367,7 +389,16 @@ class CaliperHooks {
         }
 
         $recentChange = \RecentChange::newFromId($rcid);
-        $revision = \Revision::newFromId( $recentChange->getAttribute('rc_this_oldid') );
+        if (!$recentChange) {
+            return;
+        }
+
+        $revision = MediaWikiServices::getInstance()
+            ->getRevisionLookup()
+            ->getRevisionById( $recentChange->getAttribute('rc_this_oldid') );
+        if ($revision === null) {
+            return;
+        }
 
         $event = (new Event())
             ->setProfile(new Profile(Profile::GENERAL))

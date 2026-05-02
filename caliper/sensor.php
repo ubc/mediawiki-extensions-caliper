@@ -84,7 +84,7 @@ class CaliperSensor {
             $title = \Title::newMainPage(); //dummy title
             $params = array('eventJson' => $eventJson);
             $job = new \CaliperEmitEventJob($title, $params);
-            \JobQueueGroup::singleton()->push($job);
+            MediaWikiServices::getInstance()->getJobQueueGroup()->push($job);
         } else {
             self::_sendEvent($eventJson, false);
         }

@@ -1,6 +1,6 @@
 {
     "name": "Caliper",
-    "version": "2.0.3",
+    "version": "2.1.0",
     "author": [
         "Andrew Gardener"
     ],
@@ -38,8 +38,8 @@
         "UserLogout": [
             "CaliperHooks::onUserLogout"
         ],
-        "PageContentSaveComplete": [
-            "CaliperHooks::onPageContentSaveComplete"
+        "PageSaveComplete": [
+            "CaliperHooks::onPageSaveComplete"
         ],
         "ArticleDelete": [
             "CaliperHooks::onArticleDelete"
@@ -50,8 +50,8 @@
         "ArticleProtectComplete": [
             "CaliperHooks::onArticleProtectComplete"
         ],
-        "TitleMoveComplete": [
-            "CaliperHooks::onTitleMoveComplete"
+        "PageMoveComplete": [
+            "CaliperHooks::onPageMoveComplete"
         ],
         "ArticleMergeComplete": [
             "CaliperHooks::onArticleMergeComplete"

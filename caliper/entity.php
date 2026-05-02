@@ -7,6 +7,8 @@ use IMSGlobal\Caliper\entities\agent\SoftwareApplication;
 use IMSGlobal\Caliper\entities\session\Session;
 use IMSGlobal\Caliper\entities\reading\WebPage;
 use IMSGlobal\Caliper\entities\reading\Document;
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\RevisionRecord;
 
 class CaliperEntity {
     public static function mediaWiki() {
@@ -63,10 +65,14 @@ class CaliperEntity {
 
     public static function wikiPage(\WikiPage &$wikiPage) {
         if ($wikiPage->exists()) {
+            $services = MediaWikiServices::getInstance();
+            $userFactory = $services->getUserFactory();
+
             $currentRevision = $wikiPage->getRevisionRecord();
-            $currentRevisionUser = \User::newFromId( $wikiPage->getUser() );
-            # getOldestRevision is deprecated
-            #$firstRevision = $wikiPage->getOldestRevision();
+            $revisionUser = $currentRevision ? $currentRevision->getUser() : null;
+            $currentRevisionUser = $userFactory->newFromId(
+                $revisionUser ? $revisionUser->getId() : 0
+            );
 
             $creators = array();
             foreach ($wikiPage->getContributors() as $creator) {
@@ -84,8 +90,6 @@ class CaliperEntity {
                 ->setVersion( ResourceIRI::wikiPageRevision($currentRevision->getId()) )
                 ->setCreators($creators)
                 ->setDateModified(CaliperSensor::mediawikiTimestampToDateTime($wikiPage->getTimestamp()));
-                #->setDateCreated(CaliperSensor::mediawikiTimestampToDateTime($firstRevision->getTimestamp()))
-                #->setDatePublished(CaliperSensor::mediawikiTimestampToDateTime($firstRevision->getTimestamp()));
 
             $extensions = array();
             $redirect = $wikiPage->followRedirect();
@@ -111,18 +115,25 @@ class CaliperEntity {
         }
     }
 
-    public static function wikiPageRevision(\Revision &$revision) {
-        $wikiPage = \Wikipage::newFromId( $revision->getPage() );
-        $currentRevisionUser = \User::newFromId( $revision->getUser() );
+    public static function wikiPageRevision(RevisionRecord $revision) {
+        $services = MediaWikiServices::getInstance();
+        $wikiPage = $services->getWikiPageFactory()->newFromID( $revision->getPageId() );
+
+        $userIdentity = $revision->getUser();
+        $currentRevisionUser = $services->getUserFactory()->newFromId(
+            $userIdentity ? $userIdentity->getId() : 0
+        );
 
         $creators = [CaliperActor::generateActor($currentRevisionUser)];
 
+        // RevisionRecord::getComment() returns ?CommentStoreComment
+        $comment = $revision->getComment();
         $extensions = [
-            'comment' => $revision->getComment()
+            'comment' => $comment ? $comment->text : ''
         ];
 
         $wikiPageRevisionEntity = (new Document( ResourceIRI::wikiPageRevision($revision->getId()) ))
-            ->setName($revision->getTitle()->getText())
+            ->setName($wikiPage->getTitle()->getText())
             ->setIsPartOf( CaliperEntity::wikiPage($wikiPage) )
             ->setCreators($creators)
             ->setDateModified(CaliperSensor::mediawikiTimestampToDateTime($revision->getTimestamp()))

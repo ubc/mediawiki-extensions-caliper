@@ -1,54 +1,83 @@
 <?php
+
+use CaliperExtension\caliper\CaliperSensor;
+use MediaWiki\MediaWikiServices;
+
 /**
  * @group Database
+ * @covers \CaliperHooks
+ * @covers \CaliperExtension\caliper\CaliperSensor
  */
-class CaliperHooksTest extends MediaWikiTestCase {
-    protected function setUp() {
+class CaliperHooksTest extends MediaWikiIntegrationTestCase {
+    /** @var \Title */
+    private $title;
+
+    /** @var \WikiPage */
+    private $page;
+
+    /** @var \User */
+    private $user;
+
+    /** @var \RequestContext */
+    private $requestContext;
+
+    protected function setUp(): void {
         parent::setUp();
-        global $wgRequest, $wgUser;
-        global $wgCaliperHost, $wgCaliperAPIKey,$wgCaliperAppBaseUrl, $wgCaliperUseJobQueue;
 
-        $wgCaliperHost = 'http://caliper.host.org/api/in';
-        $wgCaliperAPIKey = 'some_test_key';
-        $wgCaliperAppBaseUrl = 'http://example.org';
-        $wgCaliperUseJobQueue = true;
+        // The extension reads `global $wgCaliper*`, so set the globals directly.
+        $this->setMwGlobals([
+            'wgCaliperHost' => 'http://caliper.host.org/api/in',
+            'wgCaliperAPIKey' => 'some_test_key',
+            'wgCaliperAppBaseUrl' => 'http://example.org',
+            'wgCaliperUseJobQueue' => true,
+        ]);
 
-        $this->title = Title::newFromText("Fake Page");
-        $this->page = WikiPage::factory($this->title);
-        $this->user = parent::getTestUser()->getUser();
+        $services = MediaWikiServices::getInstance();
 
-        $this->requestContext = RequestContext::getMain();
+        $this->title = $services->getTitleFactory()->newFromText('CaliperFakePage');
+        $this->page = $services->getWikiPageFactory()->newFromTitle($this->title);
+        $this->user = $this->getTestUser()->getUser();
+
+        $this->requestContext = \RequestContext::getMain();
         $this->requestContext->setTitle($this->title);
         $this->requestContext->setUser($this->user);
-        $this->request = $this->requestContext->getRequest();
-        $this->request->setRequestURL($this->title->getFullURL());
-        $this->request->setHeaders(array(
-
-        ));
-
-        $wgRequest = $this->request;
-        $wgUser = $this->user;
     }
 
-    protected function tearDown() {
-        parent::tearDown();
-        global $wgRequest, $wgUser;
-        global $wgCaliperHost, $wgCaliperAPIKey,$wgCaliperAppBaseUrl, $wgCaliperUseJobQueue;
-        unset( $wgCaliperHost );
-        unset( $wgCaliperAPIKey );
-        unset( $wgCaliperAppBaseUrl );
-        unset( $wgCaliperUseJobQueue );
+    public function testCaliperDisabledWhenHostMissing(): void {
+        $this->setMwGlobals(['wgCaliperHost' => null]);
+        $this->assertFalse(CaliperSensor::caliperEnabled());
     }
 
-    public function testOnBeforePageDisplay() {
-        global $wgRequest, $wgUser;
-        $out = new OutputPage($this->requestContext);
+    public function testCaliperEnabledWithFullConfig(): void {
+        $this->assertTrue(CaliperSensor::caliperEnabled());
+    }
+
+    public function testOnBeforePageDisplayDoesNotThrow(): void {
+        $out = $this->requestContext->getOutput();
         $skin = $this->requestContext->getSkin();
 
-        error_log("wgRequest1");
-        error_log(var_export($wgRequest, true));
+        \CaliperHooks::onBeforePageDisplay($out, $skin);
+        $this->addToAssertionCount(1);
+    }
 
-        CaliperHooks::onBeforePageDisplay($out, $skin);
-        $this->assertTrue( true );
+    public function testOnUserLoginCompleteDoesNotThrow(): void {
+        $injectHtml = '';
+        \CaliperHooks::onUserLoginComplete($this->user, $injectHtml, true);
+        $this->addToAssertionCount(1);
+    }
+
+    public function testOnUserLogoutDoesNotThrow(): void {
+        \CaliperHooks::onUserLogout($this->user);
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Drives the full save path so PageSaveComplete fires the new
+     * onPageSaveComplete handler with a real RevisionRecord + EditResult.
+     */
+    public function testPageSaveCompleteFiresHookWithoutError(): void {
+        $content = new \WikitextContent('Initial content');
+        $status = $this->page->doUserEditContent($content, $this->user, 'create page');
+        $this->assertTrue($status->isOK());
     }
 }

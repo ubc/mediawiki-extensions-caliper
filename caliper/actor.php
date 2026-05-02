@@ -4,6 +4,7 @@ namespace CaliperExtension\caliper;
 use CaliperExtension\caliper\CaliperSensor;
 use CaliperExtension\caliper\ResourceIRI;
 use IMSGlobal\Caliper\entities\agent\Person;
+use MediaWiki\MediaWikiServices;
 
 class CaliperActor {
     private static function _generateWikimediaActor(\User &$user) {
@@ -19,7 +20,9 @@ class CaliperActor {
         }
 
         $actor = null;
-        \Hooks::run('SetCaliperActorObject', [ &$actor, &$user ]);
+        MediaWikiServices::getInstance()
+            ->getHookContainer()
+            ->run('SetCaliperActorObject', [ &$actor, &$user ]);
 
         return $actor !== null ? $actor : self::_generateWikimediaActor($user);
     }
